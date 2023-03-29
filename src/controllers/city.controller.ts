@@ -1,4 +1,4 @@
-import CityService from '@/services/city.service'
+import { CityService } from '@/services'
 import type { Request, Response } from 'express'
 
 const service = new CityService()
