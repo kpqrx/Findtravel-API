@@ -1,53 +1,40 @@
-import type { CityDataParametersType } from '@/types'
+import type { CityDataParametersType, DBPediaResponseType } from '@/types'
+import { getSPARQLQuery } from '@/utils'
 import axios from 'axios'
 
 class CityService {
-  #API_ENDPOINT
   language
 
   constructor(language = 'pl') {
-    this.#API_ENDPOINT = `https://${language}.wikipedia.org/w/api.php`
     this.language = language
   }
 
   async getData(paremeters: CityDataParametersType) {
     const { cityName } = paremeters
-    const {
-      data: {
-        query: {
-          pages: [data],
-        },
-      },
-    } = await axios.get(this.#API_ENDPOINT, {
+    console.log(getSPARQLQuery({ cityName, language: this.language }))
+    // TODO: to fix env variables resolving (null assertion)
+    const { data }: DBPediaResponseType = await axios.get(process.env.DBPEDIA_ENDPOINT!, {
       params: {
-        action: 'query',
-        format: 'json',
-        prop: 'extracts|pageimages|info',
-        titles: cityName,
-        exintro: 1,
-        explaintext: 1,
-        exsentences: 8,
-        piprop: 'original',
-        pithumbsize: 500,
-        formatversion: 2,
-        redirects: 1,
-        inprop: 'url',
+        format: 'JSON',
+        query: getSPARQLQuery({ cityName, language: this.language }),
       },
     })
 
     const {
-      title: city,
-      extract: description,
-      fullurl: wikiPageUrl,
-      original: { source: photoUrl },
+      results: {
+        bindings: [unparsedData],
+      },
     } = data
 
-    return {
-      city,
-      description,
-      photoUrl,
-      wikiPageUrl,
-    }
+    const parsedData = Object.entries(unparsedData).reduce(
+      (previousEntries, [key, { value }]) => ({
+        ...previousEntries,
+        [key]: value,
+      }),
+      {},
+    )
+
+    return parsedData
   }
 }
 

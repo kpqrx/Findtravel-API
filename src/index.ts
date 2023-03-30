@@ -1,9 +1,8 @@
 import express, { Router } from 'express'
 import cors from 'cors'
 import { CityRouter } from '@/routers'
-import dotenv from 'dotenv'
+import 'dotenv/config'
 
-dotenv.config()
 const { PORT } = process.env
 
 const app = express()
