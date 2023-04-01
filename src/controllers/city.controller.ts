@@ -9,7 +9,15 @@ class CityController {
     const data = await service.getDetails({ cityName })
 
     res.send({
-      data,
+      data
+    })
+  }
+  async getListing(req: Request, res: Response) {
+    const { query } = req.params
+    const data = await service.getListing({ query })
+
+    res.send({
+      data
     })
   }
 }

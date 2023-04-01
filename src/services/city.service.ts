@@ -1,4 +1,9 @@
-import type { CityDetailsParametersType, DBPediaResponseType } from '@/types'
+import type {
+  CityDetailsParametersType,
+  CityListingParametersType,
+  DBPediaResponseType,
+  GeonamesResponseType
+} from '@/types'
 import { getSPARQLQuery } from '@/utils'
 import axios from 'axios'
 
@@ -11,30 +16,54 @@ class CityService {
 
   async getDetails(paremeters: CityDetailsParametersType) {
     const { cityName } = paremeters
-    console.log(getSPARQLQuery({ cityName, language: this.language }))
     // TODO: to fix env variables resolving (null assertion)
-    const { data }: DBPediaResponseType = await axios.get(process.env.DBPEDIA_ENDPOINT!, {
+    const { data: rawData }: DBPediaResponseType = await axios.get(process.env.DBPEDIA_ENDPOINT!, {
       params: {
-        format: 'JSON',
-        query: getSPARQLQuery({ cityName, language: this.language }),
-      },
+        format: 'json',
+        query: getSPARQLQuery({ cityName, language: this.language })
+      }
     })
 
     const {
       results: {
-        bindings: [unparsedData],
-      },
-    } = data
+        bindings: [cityData]
+      }
+    } = rawData
 
-    const parsedData = Object.entries(unparsedData).reduce(
+    const data = Object.entries(cityData).reduce(
       (previousEntries, [key, { value }]) => ({
         ...previousEntries,
-        [key]: value,
+        [key]: value
       }),
-      {},
+      {}
     )
 
-    return parsedData
+    return data
+  }
+  async getListing(paremeters: CityListingParametersType) {
+    const { query } = paremeters
+
+    const { data: rawData }: GeonamesResponseType = await axios.get(process.env.GEONAMES_ENDPOINT!, {
+      params: {
+        type: 'json',
+        featureClass: 'P',
+        name_startsWith: query,
+        maxRows: 10,
+        username: process.env.GEONAMES_USERNAME!
+      }
+    })
+
+    const { geonames } = rawData
+
+    const data = geonames.map(({ name, countryName, geonameId, lng, lat }) => ({
+      name,
+      countryName,
+      geonameId,
+      long: parseFloat(lng),
+      lat: parseFloat(lat)
+    }))
+
+    return data
   }
 }
 
