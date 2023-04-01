@@ -47,8 +47,11 @@ class CityService {
       params: {
         type: 'json',
         featureClass: 'P',
+        featureCode: 'PPL',
         name_startsWith: query,
         maxRows: 10,
+        orderby: 'score',
+        lang: this.language,
         username: process.env.GEONAMES_USERNAME!
       }
     })
