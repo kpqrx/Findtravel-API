@@ -4,6 +4,6 @@ import { Router } from 'express'
 const router = Router()
 const controller = new CityController()
 
-router.get('/:cityName', controller.getData)
+router.get('details/:cityName', controller.getDetails)
 
 export default router

@@ -1,4 +1,4 @@
-export type CityDataParametersType = { cityName: string }
+export type CityDetailsParametersType = { cityName: string }
 export type SPARQLQueryParametersType = {
   cityName: string
   language: string

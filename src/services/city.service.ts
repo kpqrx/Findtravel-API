@@ -1,4 +1,4 @@
-import type { CityDataParametersType, DBPediaResponseType } from '@/types'
+import type { CityDetailsParametersType, DBPediaResponseType } from '@/types'
 import { getSPARQLQuery } from '@/utils'
 import axios from 'axios'
 
@@ -9,7 +9,7 @@ class CityService {
     this.language = language
   }
 
-  async getData(paremeters: CityDataParametersType) {
+  async getDetails(paremeters: CityDetailsParametersType) {
     const { cityName } = paremeters
     console.log(getSPARQLQuery({ cityName, language: this.language }))
     // TODO: to fix env variables resolving (null assertion)
