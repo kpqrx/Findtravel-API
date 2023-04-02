@@ -1,9 +1,9 @@
-export type CityDetailsParametersType = { cityName: string }
+export type CityDetailsParametersType = { geonameId: string }
 
 export type CityListingParametersType = { query: string }
 
 export type SPARQLQueryParametersType = {
-  cityName: string
+  geonameId: string
   language: string
 }
 
@@ -15,7 +15,7 @@ export type DBPediaResponseType = {
           [K: string]: {
             [K: 'value' | string]: string
           }
-        },
+        }
       ]
     }
   }
@@ -24,11 +24,11 @@ export type DBPediaResponseType = {
 export type GeonamesResponseType = {
   data: {
     geonames: {
-    name: string
-    countryName: string
-    geonameId: number
-    lng: string
-    lat: string
-  }[]
+      name: string
+      countryName: string
+      geonameId: number
+      lng: string
+      lat: string
+    }[]
   }
 }

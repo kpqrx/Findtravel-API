@@ -5,8 +5,8 @@ const service = new CityService()
 
 class CityController {
   async getDetails(req: Request, res: Response) {
-    const { cityName } = req.params
-    const data = await service.getDetails({ cityName })
+    const { geonameId } = req.params
+    const data = await service.getDetails({ geonameId })
 
     res.send({
       data

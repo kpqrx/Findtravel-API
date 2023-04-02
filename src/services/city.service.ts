@@ -15,12 +15,12 @@ class CityService {
   }
 
   async getDetails(paremeters: CityDetailsParametersType) {
-    const { cityName } = paremeters
+    const { geonameId } = paremeters
     // TODO: to fix env variables resolving (null assertion)
     const { data: rawData }: DBPediaResponseType = await axios.get(process.env.DBPEDIA_ENDPOINT!, {
       params: {
         format: 'json',
-        query: getSPARQLQuery({ cityName, language: this.language })
+        query: getSPARQLQuery({ geonameId, language: this.language })
       }
     })
 
@@ -47,7 +47,7 @@ class CityService {
       params: {
         type: 'json',
         featureClass: 'P',
-        featureCode: 'PPL',
+        featureCode: ['PPLC', 'PPLS', 'PPLX'],
         name_startsWith: query,
         maxRows: 10,
         orderby: 'score',
