@@ -30,6 +30,8 @@ class CityService {
       }
     } = rawData
 
+    console.log(rawData)
+
     const data = Object.entries(cityData).reduce(
       (previousEntries, [key, { value }]) => ({
         ...previousEntries,
@@ -59,8 +61,8 @@ class CityService {
     const { geonames } = rawData
 
     const data = geonames.map(({ name, countryName, geonameId, lng, lat }) => ({
-      name,
-      countryName,
+      city: name,
+      country: countryName,
       geonameId,
       long: parseFloat(lng),
       lat: parseFloat(lat)

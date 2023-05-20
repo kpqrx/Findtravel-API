@@ -16,9 +16,7 @@ class CityController {
     const { query } = req.params
     const data = await service.getListing({ query })
 
-    res.send({
-      data
-    })
+    res.send(data)
   }
 }
 
